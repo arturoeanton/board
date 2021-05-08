@@ -1,0 +1,35 @@
+<html>
+
+<head>
+</head>
+
+<body>
+    <input type="text" id="text" /> <button onclick="send()">Send</button> <button onclick="refresh()">refresh</button>
+    <hr />
+    <div id="messages"></div>
+
+    <script>
+        var source = new EventSource('/stream');
+        source.addEventListener('message', function (e) {
+            document.getElementById("messages").innerHTML += e.data + "<br/>"
+        }, false);
+
+        source.addEventListener('refresh', function (e) {
+            console.log(JSON.parse(e.data))
+            document.getElementById("messages").innerHTML = JSON.parse(e.data).join('<br/>')+'<br/>'
+        }, false);
+
+        var send = function () {
+            fetch(`/msg?msg=${document.getElementById("text").value}`)
+                .then(response => response.json())
+                .then(data => console.log(data));
+        }
+        var refresh = function () {
+            fetch(`/refresh`)
+                .then(response => response.json())
+                .then(data => console.log(data));
+        }
+    </script>
+</body>
+
+</html>

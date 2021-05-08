@@ -1,0 +1,13 @@
+<html> 
+<head> 
+    </head>
+    <body>
+    <div id="messages"></div>
+	<script> 
+	var source = new EventSource('/stream');
+	source.addEventListener('message', function(e) {
+		document.getElementById("messages").innerHTML += e.data + "<br/>"
+	}, false);
+    </script> 
+</body>
+</html>
